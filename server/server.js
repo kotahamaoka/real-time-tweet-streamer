@@ -12,10 +12,17 @@ const post = util.promisify(request.post)
 const get = util.promisify(request.get)
 
 app.use(bodyParser.json())
+const cors = require('cors');
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const server = http.createServer(app)
-const io = socketIo(server)
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
 const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN
 
